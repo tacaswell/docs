@@ -8,9 +8,9 @@ Introduction
 The fileStore is for abstracting access to the contents of
 data stored in files.  It is important to make the distinction between
 *files* and *datasets*, as a single *file* can contain more than one *dataset*.
-There are two core collections, ``FileBase``
+There are two core collections, ``Resource``
 which stores information about the *files* (where the file physically is,
-what format it is) and  ``FileEventLink`` which stores which file and how
+what format it is) and  ``Nugget`` which stores which file and how
 to extract a single *dataset* from that file.   Thus, by storing a single
 uuid, MetadataStore can keep track of non-scalar data in external storage.
 By only linking to ``FileStore`` through a *dataset* ID the grouping of
@@ -29,13 +29,13 @@ like file size, data shape/type ect.
 Collections
 ===========
 
-FileBase
+Resource
 --------
 
-The ``FileBase`` collection store the bare minimum required to locate and
+The ``Resource`` collection store the bare minimum required to locate and
 open a file.  The documents have the following structure ::
 
-  FileBase : {
+  Resource : {
       spec: <string>,
       file_path: <string>,
       custom: <dict>
@@ -53,8 +53,8 @@ Which mean:
    with the ``file_path`` when the file is opened.
 
 
-There is not intended to be any reference to ``FileBase`` documents on in the
-analysis client code, but DAQ will need to both create ``FileBase`` entries and
+There is not intended to be any reference to ``Resource`` documents on in the
+analysis client code, but DAQ will need to both create ``Resource`` entries and
 keep track of them to create ``FileEntryLink`` documents.
 
 
@@ -64,14 +64,14 @@ The ``FileEntryLink`` collections holds the information required to extract a si
 data set from a *file*.  The documents have the following structure ::
 
   FileEntryLink : {
-      file_base : <FileBase reference>,
+      resource : <Resource reference>,
       event_id : <unique id>,
       link_parameters : <dict>,
   }
 
 which mean :
 
-   - ``file_base`` : a link back to what file the *dataset* is in.
+   - ``resource`` : a link back to what file the *dataset* is in.
    - ``event_id`` : a globally unique identifier for the dataset.  This string is
      exposed to ``metadataStore``
    - ``link_parameters`` : a dictionary of kwargs to pass to the ``Handler`` instance
@@ -84,7 +84,7 @@ The handler classes are what hold all of the data retrieval logic together.  The
 
 
   fel_doc = get_event_link_document(event_id)
-  fb_doc = get_file_base_doc(fel_doc)
+  fb_doc = get_resource_doc(fel_doc)
   # use the spec value to look up what handler to use
   h_class = handler_dispatch(fb_doc.spec)
   # use the file_path and custom values to create a handler
