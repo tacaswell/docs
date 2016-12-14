@@ -1,0 +1,95 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:comment d:nil date:t e:t email:nil
+#+OPTIONS: f:t inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+OPTIONS: tasks:t tex:t timestamp:t toc:nil todo:t |:t
+#+BEAMER_FRAME_LEVEL: 2
+#+TITLE: =Data Acqusition, Management and Analysis at NSLS-II=
+#+DATE: 2016-11-07
+#+AUTHOR: Thomas A Caswell
+#+EMAIL: tcaswell@bnl.gov
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:2 num:t toc:nil \n:nil @:t ::t |:t ^:{} -:nil f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:
+#+LINK_HOME:
+
+#+STARTUP: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [x11names]
+#+latex_header: \setbeamertemplate{navigation symbols}{}%remove navigation symbols
+#+latex_header: \usepackage{multicol}
+#+latex_header: \institute[BNL]{Brookhaven National Labratory}
+#+BEAMER_COLOR_THEME: seahorse
+#+BEAMER_THEME: Madrid
+#+BEAMER_INNER_THEME: default
+
+
+#+BEAMER_FRAME_LEVEL: 2
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+PROPERTY: BEAMER_col_ALL 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 :ETC
+
+* Overview [5 min]
+** Design goals
+- Support *streaming* and *prompt* data analysis
+- Capture *metadata* of the hardware and user intention
+- Make datasets *searchable* with rich queries on metadata and data.
+- Use *existing, open-source technologies and languages* in particular
+  the *scientific Python* community
+- Establish *clear, consistent interfaces*
+
+
+** Data Collection Overview
+\begin{center}
+\includegraphics[width=.8\textwidth]{collection-overview}
+\end{center}
+
+
+* Bluesky [5 min]
+** =BlueSky=
+ - Separate in code:
+   - encoding experimental logic (plans)
+   - executing the experiment (=RunEngine=)
+   - data I/O (=Document= model)
+   - control system interface (=ophyd=)
+ - Decoupling enables reuse-ability / extend-ability
+ - Foundation for beam line specific tooling
+
+* Ophyd [3 min]
+** Ophyd
+ - Provides uniform interface expected by =bluesky=
+ - co-developed with =bluesky= but no dependency either direction
+ - Declarative API for creating hierarchical devices
+ - Encapsulates complex devices (ex AreaDetector)
+ - Smooths over inconsistencies in EPICS / implementation
+
+* Document model [5 min]
+** =Documents= are dictionaries with flexible schema
+   - start :: what we know at the beginning of run
+   - event :: the data payload of measurement `at the same time'
+   - descriptor :: schema + metadata for a set of events
+   - stop :: what we know only at the end of the run
+
+** Document generation timeline
+
+\begin{center}
+\includegraphics[width=.9\textwidth]{document-generation-timeline}
+\end{center}
+
+
+* DataBroker [2 min]
+** =DataBroker=
+
+ - Provides uniform interface to data stores
+ - Separates access to `metadata' from access to `data'
+ - Possibility to do caching
+ - Planned to integrate with analysis databases
+
+
+* DEMOS!!!!!!
+** DEMOS
+  *demo time*
