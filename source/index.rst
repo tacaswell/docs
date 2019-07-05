@@ -127,6 +127,7 @@ The following projects are in use but in a less mature stage of development.
    resources
    internal_index
    meetings/index
+   design/index
 
 .. toctree::
    :hidden:
